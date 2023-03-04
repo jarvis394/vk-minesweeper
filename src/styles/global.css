@@ -1,0 +1,15 @@
+body {
+  margin: 0;
+  margin-top: env(safe-area-inset-top) !important;
+  margin-bottom: env(safe-area-inset-bottom) !important;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+* {
+  box-sizing: border-box;
+}

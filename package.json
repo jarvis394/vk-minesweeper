@@ -1,0 +1,44 @@
+{
+  "name": "vk-minesweeper",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "tsc && vite build",
+    "lint": "yarn run lint:eslint && yarn run lint:prettier",
+    "lint:eslint": "yarn eslint .",
+    "lint:prettier": "yarn prettier . -c",
+    "lint:prettier:fix": "yarn prettier . -w",
+    "start:dev": "vite --host",
+    "start:prod": "yarn run build && vite preview"
+  },
+  "dependencies": {
+    "@emotion/css": "^11.10.6",
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
+    "@reduxjs/toolkit": "^1.9.3",
+    "classnames": "^2.3.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-redux": "^8.0.5"
+  },
+  "devDependencies": {
+    "@emotion/babel-plugin": "^11.10.6",
+    "@types/node": "^18.14.2",
+    "@types/react": "^18.0.28",
+    "@types/react-dom": "^18.0.11",
+    "@typescript-eslint/eslint-plugin": "^5.54.0",
+    "@typescript-eslint/parser": "^5.54.0",
+    "@vitejs/plugin-react": "^3.1.0",
+    "eslint": "^8.35.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "prettier": "^2.8.4",
+    "ts-extras": "^0.11.0",
+    "typescript": "^4.9.3",
+    "vite": "^4.1.0",
+    "vite-plugin-mkcert": "^1.13.3",
+    "vite-plugin-singlefile": "^0.13.3"
+  }
+}

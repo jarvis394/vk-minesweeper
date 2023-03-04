@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "allowJs": false,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "module": "esnext",
+    "moduleResolution": "Node",
+    "removeComments": true,
+    "noEmit": true,
+    "resolveJsonModule": true,
+    "rootDir": "./src",
+    "baseUrl": ".",
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "ES2016",
+    "types": ["vite/client"],
+    "jsxImportSource": "@emotion/react"
+  },
+  "exclude": ["node_modules", "dist"],
+  "include": ["src"]
+}
