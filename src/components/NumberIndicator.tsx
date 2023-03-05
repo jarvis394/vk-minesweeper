@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import React, { CSSProperties } from 'react'
+import React, { CSSProperties, useMemo } from 'react'
 
 const indicatorStyles: Record<string, CSSProperties> = {}
 const SPRITE_INDICATOR_SIZE = 14
@@ -32,9 +32,14 @@ type NumberIndicatorProps = {
 }
 
 const NumberIndicator: React.FC<NumberIndicatorProps> = ({ value }) => {
-  const hundreds = (value - (value % 100)) / 100
-  const tens = ((value - (value % 10)) / 10) % 10
-  const ones = value % 10
+  const parsedValue = useMemo(() => {
+    if (value > 999) return 999
+    else if (value < 0) return 0
+    else return value
+  }, [value])
+  const hundreds = (parsedValue - (parsedValue % 100)) / 100
+  const tens = ((parsedValue - (parsedValue % 10)) / 10) % 10
+  const ones = parsedValue % 10
 
   return (
     <Root>
