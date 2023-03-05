@@ -15,6 +15,7 @@ type FieldCells = Cell[][]
 type FieldState = {
   size: number
   bombs: Cell[]
+  flagsAmount: number
   cells: FieldCells
   openedCellsAmount: number
   gameState: GameState
@@ -25,6 +26,7 @@ const initialState: FieldState = {
   size: FIELD_SIZE,
   cells: [],
   bombs: [],
+  flagsAmount: 0,
   openedCellsAmount: 0,
   gameState: GameState.IDLE,
   gameResult: false,
@@ -232,12 +234,20 @@ const GameSlice = createSlice({
     setFlag(state, action: PayloadAction<{ cell: Cell }>) {
       const { cell } = action.payload
 
+      if (state.gameState === GameState.ENDED) return
+
+      state.gameState = GameState.PLAYING
+
       switch (cell.state) {
         case CellState.CLOSED:
+          if (state.flagsAmount >= state.bombs.length) return
+
           state.cells[cell.y][cell.x].state = CellState.FLAGGED
+          state.flagsAmount += 1
           break
         case CellState.FLAGGED:
           state.cells[cell.y][cell.x].state = CellState.QUESTIONED
+          state.flagsAmount -= 1
           break
         case CellState.QUESTIONED:
           state.cells[cell.y][cell.x].state = CellState.CLOSED
@@ -253,6 +263,8 @@ const GameSlice = createSlice({
     /** Creates random game field */
     generateCells(state) {
       const { cells, bombs } = generateCellsFunction(state.size)
+      state.gameState = GameState.IDLE
+      state.gameResult = false
       state.cells = cells
       state.bombs = bombs
     },

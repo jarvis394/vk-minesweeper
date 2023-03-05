@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import React, { useState } from 'react'
+import React, { useState, CSSProperties } from 'react'
 import cx from 'classnames'
 import { Cell, CellState, CellValue } from 'src/types/Cell'
 import { useAppDispatch, useAppSelector } from 'src/store'
@@ -17,7 +17,6 @@ import {
   isTryingToSetFlag,
 } from 'src/utils/cell'
 import { GameState } from 'src/types/GameState'
-import type * as CSS from 'csstype'
 
 const SPRITE_POSITIONS = {
   empty: '-17px -51px',
@@ -26,6 +25,7 @@ const SPRITE_POSITIONS = {
   closed: '0px -51px',
   flagged: '-34px -51px',
   questioned: '-51px -51px',
+  questionedActive: '-68px -51px',
   explodedBomb: '-102px -51px',
   falseFlagged: '-119px -51px',
   1: '0px -68px',
@@ -38,7 +38,7 @@ const SPRITE_POSITIONS = {
   8: '-119px -68px',
 }
 
-const cellStyles: Record<string, CSS.Properties> = {}
+const cellStyles: Record<string, CSSProperties> = {}
 objectKeys(SPRITE_POSITIONS).forEach((key) => {
   cellStyles['&.Cell--' + key] = {
     backgroundPosition: SPRITE_POSITIONS[key],
@@ -47,14 +47,20 @@ objectKeys(SPRITE_POSITIONS).forEach((key) => {
 
 const Root = styled.button({
   border: '0px solid transparent',
-  width: 16,
-  height: 16,
+  width: 'var(--spriteCellSizePixels)',
+  height: 'var(--spriteCellSizePixels)',
   background: 'url(./minesweeper-sprites.png)',
   backgroundPosition: SPRITE_POSITIONS.closed,
+  transform: 'scale(calc(var(--cellSize) / var(--spriteCellSize)))',
   imageRendering: 'pixelated',
+  transformOrigin: 'left top',
   cursor: 'pointer',
-  fontSize: 8,
+  padding: 0,
   userSelect: 'none',
+  '&:focus-visible': {
+    outline: 'red',
+    boxShadow: '0 0 0 2px inset rgba(255, 0, 0, 0.75)',
+  },
   ...cellStyles,
 })
 
@@ -104,7 +110,7 @@ const CellButton: React.FC<{
     if (cell.value === CellValue.EMPTY) {
       dispatch(openMultipleCells({ cell }))
     } else {
-      dispatch(openPokedCells({ cell }))
+      if (cell.state === CellState.OPEN) dispatch(openPokedCells({ cell }))
       dispatch(openCell({ cell }))
     }
   }
