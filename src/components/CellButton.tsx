@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import React, { useState, CSSProperties } from 'react'
+import React, { useState, CSSProperties, useRef } from 'react'
 import cx from 'classnames'
 import { Cell, CellState, CellValue } from 'src/types/Cell'
 import { useAppDispatch, useAppSelector } from 'src/store'

@@ -236,8 +236,6 @@ const GameSlice = createSlice({
 
       if (state.gameState === GameState.ENDED) return
 
-      state.gameState = GameState.PLAYING
-
       switch (cell.state) {
         case CellState.CLOSED:
           if (state.flagsAmount >= state.bombs.length) return

@@ -8,6 +8,7 @@ const Root = styled.div({
   alignItems: 'center',
   justifyContent: 'center',
   minHeight: '100vh',
+  backgroundColor: '#b6b9bc',
 })
 
 const App: React.FC = () => {

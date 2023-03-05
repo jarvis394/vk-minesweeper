@@ -6,8 +6,10 @@ export const isOpenDisabledForCell = (cell: Cell) =>
   [CellState.FLAGGED, CellState.QUESTIONED].includes(cell.state)
 
 export const isTryingToSetFlag = (e: React.MouseEvent) => {
-  const rightClick = e.buttons === MouseButton.RIGHT
-  const ctrlClick = e.ctrlKey && e.buttons === MouseButton.LEFT
+  const checkClick = (event: React.MouseEvent, button: number) =>
+    event.button === button || event.buttons === button
+  const rightClick = checkClick(e, MouseButton.RIGHT)
+  const ctrlClick = e.ctrlKey && checkClick(e, MouseButton.LEFT)
 
   return rightClick || ctrlClick
 }
