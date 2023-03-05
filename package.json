@@ -2,7 +2,6 @@
   "name": "vk-minesweeper",
   "private": true,
   "version": "0.0.0",
-  "type": "module",
   "scripts": {
     "build": "tsc && vite build",
     "lint": "yarn run lint:eslint && yarn run lint:prettier",
@@ -31,6 +30,7 @@
     "@typescript-eslint/parser": "^5.54.0",
     "@vitejs/plugin-react": "^3.1.0",
     "eslint": "^8.35.0",
+    "eslint-config-prettier": "^8.6.0",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",

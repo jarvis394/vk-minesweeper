@@ -10,9 +10,9 @@ const container = document.getElementById('root')
 const root = createRoot(container as HTMLElement)
 
 root.render(
-	<StrictMode>
-		<Provider store={store}>
-			<App />
-		</Provider>
-	</StrictMode>
+  <StrictMode>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </StrictMode>
 )

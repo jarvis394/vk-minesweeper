@@ -1,9 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { BOMBS_AMOUNT, FIELD_SIZE } from 'src/config/constants'
+import { FIELD_SIZE } from 'src/config/constants'
 import { Cell, CellState, CellValue } from 'src/types/Cell'
 import { GameState } from 'src/types/GameState'
 import {
   calculateCellValues,
+  checkIfWon,
   generateCellsFunction,
   getAdjacentCells,
 } from 'src/utils/field'
@@ -72,7 +73,7 @@ const openCellAction = (state: FieldState, cell: Cell) => {
         const currentOpenedBombIndex = state.bombs.findIndex(
           (e) => e.x === cell.x && e.y === cell.y
         )
-        let newBomb = { ...state.cells[0][0] }
+        const newBomb = { ...state.cells[0][0] }
 
         // We are finding new place for a bomb top-left to bottom-right
         // as Windows's Minesweeper did
@@ -103,22 +104,31 @@ const openCellAction = (state: FieldState, cell: Cell) => {
         state.cells[cell.y][cell.x].state = CellState.OPEN
         state.openedCellsAmount += 1
       }
+
+      if (checkIfWon(state.cells)) {
+        state.gameResult = GameResult.WON
+        state.gameState = GameState.ENDED
+      }
+
+      break
     }
     case GameState.PLAYING: {
       if (isBomb(state.cells[cell.y][cell.x])) {
-        explodeBombAction(state, cell)
+        return explodeBombAction(state, cell)
       }
 
       state.cells[cell.y][cell.x].state = CellState.OPEN
       state.openedCellsAmount += 1
 
-      // Win game if all cells except bombs are opened
-      if (state.openedCellsAmount === FIELD_SIZE * FIELD_SIZE - BOMBS_AMOUNT) {
+      if (checkIfWon(state.cells)) {
         state.gameResult = GameResult.WON
+        state.gameState = GameState.ENDED
       }
+
+      break
     }
     case GameState.ENDED:
-      return
+      break
     default:
       exhaustivnessCheck(state.gameState)
   }
@@ -127,6 +137,7 @@ const openCellAction = (state: FieldState, cell: Cell) => {
 const openMultipleCellsAction = (state: FieldState, cell: Cell) => {
   const startingCell = state.cells[cell.y][cell.x]
   const setOpen = (cell: Cell) => {
+    if (cell.state === CellState.FLAGGED) state.flagsAmount -= 1
     state.cells[cell.y][cell.x].state = CellState.OPEN
     state.openedCellsAmount += 1
   }
@@ -237,19 +248,28 @@ const GameSlice = createSlice({
       if (state.gameState === GameState.ENDED) return
 
       switch (cell.state) {
-        case CellState.CLOSED:
+        case CellState.CLOSED: {
           if (state.flagsAmount >= state.bombs.length) return
 
           state.cells[cell.y][cell.x].state = CellState.FLAGGED
           state.flagsAmount += 1
+
+          if (checkIfWon(state.cells)) {
+            state.gameResult = GameResult.WON
+            state.gameState = GameState.ENDED
+          }
+
           break
-        case CellState.FLAGGED:
+        }
+        case CellState.FLAGGED: {
           state.cells[cell.y][cell.x].state = CellState.QUESTIONED
           state.flagsAmount -= 1
           break
-        case CellState.QUESTIONED:
+        }
+        case CellState.QUESTIONED: {
           state.cells[cell.y][cell.x].state = CellState.CLOSED
           break
+        }
         default:
           break
       }
@@ -263,6 +283,7 @@ const GameSlice = createSlice({
       const { cells, bombs } = generateCellsFunction(state.size)
       state.gameState = GameState.IDLE
       state.gameResult = false
+      state.flagsAmount = 0
       state.cells = cells
       state.bombs = bombs
     },

@@ -10,15 +10,17 @@ import Smile from './Smile'
 import Timer from './Timer'
 
 const Wrapper = styled('div', {
-  shouldForwardProp: (p) => !['cellSize'].includes(p),
+  shouldForwardProp: (p) => !['cellSize', 'fieldSize'].includes(p),
 })<{
   cellSize: number
-}>(({ cellSize }) => ({
+  fieldSize: number
+}>(({ cellSize, fieldSize }) => ({
   width: 'fit-content',
   '--spriteCellSizePixels': SPRITE_CELL_SIZE + 'px',
   '--spriteCellSize': SPRITE_CELL_SIZE,
   '--cellSizePixels': cellSize + 'px',
   '--cellSize': cellSize,
+  '--fieldSize': fieldSize,
 }))
 
 const GameContainer = styled.div({
@@ -53,7 +55,7 @@ const Header = styled(BorderedContainer)({
 
 const Row = styled.div({
   display: 'grid',
-  grid: 'repeat(1, var(--cellSizePixels)) / repeat(16, var(--cellSizePixels))',
+  grid: 'repeat(1, var(--cellSizePixels)) / repeat(var(--fieldSize), var(--cellSizePixels))',
 })
 
 const Game: React.FC = () => {
@@ -72,7 +74,7 @@ const Game: React.FC = () => {
 
   useLayoutEffect(() => {
     dispatch(generateCells())
-  }, [])
+  }, [dispatch])
 
   // Handle poking events outside of the field
   useEffect(() => {
@@ -94,22 +96,23 @@ const Game: React.FC = () => {
 
   // Remembers mouse position relative to the field
   useEffect(() => {
+    const fieldRef = $field.current
     const handleMouseEnter = () => setIsMouseInsideField(true)
     const handleMouseLeave = () => {
       setIsMouseInsideField(false)
     }
 
-    $field.current?.addEventListener('mouseenter', handleMouseEnter)
-    $field.current?.addEventListener('mouseleave', handleMouseLeave)
+    fieldRef?.addEventListener('mouseenter', handleMouseEnter)
+    fieldRef?.addEventListener('mouseleave', handleMouseLeave)
 
     return () => {
-      $field.current?.removeEventListener('mouseenter', handleMouseEnter)
-      $field.current?.removeEventListener('mouseleave', handleMouseLeave)
+      fieldRef?.removeEventListener('mouseenter', handleMouseEnter)
+      fieldRef?.removeEventListener('mouseleave', handleMouseLeave)
     }
   }, [cells, fieldSize])
 
   return (
-    <Wrapper cellSize={cellSize}>
+    <Wrapper fieldSize={fieldSize} cellSize={cellSize}>
       <GameContainer>
         <Header>
           <FlagsAmount />

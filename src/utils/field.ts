@@ -1,6 +1,6 @@
 import { BOMBS_AMOUNT, FIELD_SIZE } from 'src/config/constants'
 import { Cell, CellState, CellValue } from 'src/types/Cell'
-import { isBomb } from './cell'
+import { isBomb, isBombCovered } from './cell'
 
 export const isInBounds = (x: Cell['x'], y: Cell['y'], fieldSize: number) => {
   return x >= 0 && x < fieldSize && y >= 0 && y < fieldSize
@@ -55,7 +55,7 @@ export const calculateCellValues = (
 export const generateCellsFunction = (
   fieldSize: number
 ): { cells: Cell[][]; bombs: Cell[] } => {
-  let cells: Cell[][] = []
+  const cells: Cell[][] = []
 
   for (let col = 0; col < fieldSize; col++) {
     cells[col] = []
@@ -86,4 +86,19 @@ export const generateCellsFunction = (
     cells,
     bombs,
   }
+}
+
+export const checkIfWon = (cells: Cell[][]) => {
+  let hasWon = true
+
+  cells.forEach((row) =>
+    row.forEach((cell) => {
+      if (!isBombCovered(cell)) {
+        hasWon = false
+        return
+      }
+    })
+  )
+
+  return hasWon
 }

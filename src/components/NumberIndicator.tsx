@@ -1,6 +1,5 @@
 import styled from '@emotion/styled'
-import React from 'react'
-import { CSSProperties } from 'react'
+import React, { CSSProperties } from 'react'
 
 const indicatorStyles: Record<string, CSSProperties> = {}
 const SPRITE_INDICATOR_SIZE = 14

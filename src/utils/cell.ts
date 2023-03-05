@@ -2,6 +2,15 @@ import { Cell, CellValue, CellState } from 'src/types/Cell'
 import { MouseButton } from 'src/types/MouseButton'
 
 export const isBomb = (cell: Cell) => cell.value === CellValue.BOMB
+
+export const isBombCovered = (cell: Cell) => {
+  if (isBomb(cell)) {
+    return cell.state === CellState.FLAGGED
+  } else {
+    return cell.state === CellState.OPEN
+  }
+}
+
 export const isOpenDisabledForCell = (cell: Cell) =>
   [CellState.FLAGGED, CellState.QUESTIONED].includes(cell.state)
 

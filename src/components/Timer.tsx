@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useAppSelector } from 'src/store'
 import { GameState } from 'src/types/GameState'
 import useInterval from 'src/hooks/useInterval'

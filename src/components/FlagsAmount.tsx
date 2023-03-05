@@ -1,12 +1,6 @@
-import React, { useEffect } from 'react'
-import styled from '@emotion/styled'
+import React from 'react'
 import { useAppSelector } from 'src/store'
 import NumberIndicator from './NumberIndicator'
-
-const Root = styled.div({
-  display: 'flex',
-  flexDirection: 'row',
-})
 
 const FlagsAmount: React.FC = () => {
   const bombsAmount = useAppSelector((state) => state.game.bombs.length)
